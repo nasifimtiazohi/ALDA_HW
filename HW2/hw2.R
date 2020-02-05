@@ -158,6 +158,16 @@ generate_k_folds <- function(n, k) {
   # Tip 2: R supports logical indexing. For example, If you input x = 1:5; y=c(1,2,3,2,1); 
   # x[y==2] gives an output of c(2,4).
   
+  folds=rep(1:k,n/k)
+  #check remainders
+  rem=n%%k
+  if (rem!=0){
+      temp=c(1:rem)
+      folds=c(folds,temp)
+  }
+  #randomize
+  folds=sample(folds)
+  return(folds)
 }
 
 k_fold_cross_validation_prediction <- function(x, y, k, k_folds, classifier_function) {
@@ -228,14 +238,11 @@ calculate_precision <- function(confusion_matrix){
   
 }
 
-# Train a 5-nn classifier on the whole dataset and predict on the training dataset
-train_knn_predict <- knn(x, y, x, k=3)
-# Calcualte training accuracy. Expected output: 0.77
-print(mean(train_knn_predict == y))
-
-# ------- Part B -------
-
-# Train RPART on the whole dataset and predict on the training dataset
-train_dtree_predict <- dtree(x, y, x)
-# Calcualte training accuracy. Expected output: 0.85
-print(mean(train_dtree_predict == y))
+# Generate 5 folds for cross-validation
+# We store the folds so we can use the same ones for both classifiers
+set.seed(123) # The folds are random, so set a seed for consistency
+k <- 5
+folds <- generate_k_folds(nrow(x), k)
+# There should be 20 of each number 1 through 5
+print(table(folds))
+print(folds)
