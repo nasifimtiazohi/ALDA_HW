@@ -30,6 +30,39 @@ calculate_cosine <- function(p, q) {
   
 }
 
+knn_single_vector <- function(vec,x_train,y_train,distance_method,k){
+    # INPUT:
+    # vec: a single test data point as a vector
+    # other inputs follow knn function
+
+    # OUTPUT: a column vector where each row tells the distance between
+    ##        corresponding row in the trainig set and test data
+
+    # WORKFLOW
+    # for a row data vector, get its distance column vector with each row in training set
+    # join distance and label vector to form a matrix
+    # sort matrix by distance, from lowest to highest
+    # take first k
+    # get the majority vote (lower numeric value when tie)
+    if (distance_method=="euclidian"){
+        distance=apply(x_train,MARGIN=1,calculate_euclidean,vec)
+        df=data.frame(distance,y_train)
+        df=df[order(distance),]
+        df=df[1:k,]
+        tab=table(df$y_train)
+        prediction=as.numeric(names(which.max(tab))) #this returns the lower value for ties
+        return(prediction)
+    } else if (distance_method=="cosine"){
+        distance=apply(x_train,MARGIN=1,calculate_cosine,vec)
+        df=data.frame(distance,y_train)
+        df=df[order(distance),]
+        df=df[1:k,]
+        tab=table(df$y_train)
+        prediction=as.numeric(names(which.max(tab))) #this returns the lower value for ties
+        return(prediction)
+    }
+}
+
 knn <- function(x_train, y_train, x_test, distance_method = 'cosine', k = 3){
   # You will be IMPLEMENTING a KNN Classifier here
   
@@ -59,7 +92,12 @@ knn <- function(x_train, y_train, x_test, distance_method = 'cosine', k = 3){
   # NOTE 3:
   # You are not allowed to use predefined knn-based packages/functions. Using them will result in automatic zero.
   # Allowed packages: R base, utils
-  
+
+
+  ### MY CODE ###
+
+  # get knn classification for all row in test data
+  output=apply(x_test,MARGIN = 1,knn_single_vector,x_train=x_train,y_train=y_train,distance_method=distance_method,k=k)
 }
 
 # ------- Part B -------
@@ -181,3 +219,4 @@ calculate_precision <- function(confusion_matrix){
   # prediction precision
   
 }
+
