@@ -26,7 +26,7 @@ calculate_euclidean <- function(p, q) {
 calculate_cosine <- function(p, q) {
   # Input: p, q are numeric vectors of the same length
   # output: a single value of type double, containing the cosine distance between p and q.
-  return(sum(p*q)/(vector_norm(p)*vector_norm(q)))
+  return(1-sum(p*q)/(vector_norm(p)*vector_norm(q)))
   
 }
 
@@ -181,4 +181,3 @@ calculate_precision <- function(confusion_matrix){
   # prediction precision
   
 }
-
