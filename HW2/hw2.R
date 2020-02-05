@@ -130,6 +130,11 @@ dtree <- function(x_train, y_train, x_test){
     method="class" #will predict classes
   )
   predictions=predict(model,newdata=x_test,type="class")
+  
+  #TODO: below two lines are quick hack
+  predictions=as.vector(predictions) #to cut out Level information that prints out at the end
+  predictions=as.numeric(predictions) #numeric directly categorizes as 1 or 2
+
   return(predictions)
 }
 
@@ -184,7 +189,22 @@ k_fold_cross_validation_prediction <- function(x, y, k, k_folds, classifier_func
   # OUTPUT:
   # A vector of predicted class values for each instance in x (length = nrow(x)). The ith
   # prediction should correspond to the ith row in x.
-  
+  predictions=rep(0,nrow(x))
+  for(i in 1:k){
+      x[['fold']]=k_folds
+
+      x_train=x[(x$fold!=i),]
+      x_train$fold=NULL
+      y_train=y[k_folds!=i]
+
+      x_test=x[(x$fold==i),]
+      x_test$fold=NULL
+
+      output=classifier_function(x_train=x_train,y_train=y_train,x_test=x_test)
+      predictions[k_folds==i] = output
+
+  }
+  return(predictions)
   
 }
 
@@ -238,11 +258,28 @@ calculate_precision <- function(confusion_matrix){
   
 }
 
+# read data from disk, extract train test into separate variables 
+all_data <- read.csv('./HW2/pima-indians-diabetes.csv', stringsAsFactors= T, header = F)
+x <- all_data[, 1:8]
+y <- as.factor(all_data[, 9])
+
 # Generate 5 folds for cross-validation
 # We store the folds so we can use the same ones for both classifiers
 set.seed(123) # The folds are random, so set a seed for consistency
 k <- 5
 folds <- generate_k_folds(nrow(x), k)
 # There should be 20 of each number 1 through 5
-print(table(folds))
-print(folds)
+table(folds)
+
+
+
+# Just for testing, we use simple (non-random) folds, which allows us to 
+# confirm that we get the expected output from knn and dtree
+simple_folds <- rep(1:k, 100/k)
+# Check the percentage of Class 1 predictions
+# Expected result: 0.3
+print(mean(k_fold_cross_validation_prediction(x, y, k, simple_folds, dtree) == "1"))
+
+# Check the percentage of Class 1 predictions
+# Expected result: 0.31
+print(mean(k_fold_cross_validation_prediction(x, y, k, simple_folds, knn) == "1"))
