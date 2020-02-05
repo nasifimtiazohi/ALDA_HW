@@ -97,7 +97,8 @@ knn <- function(x_train, y_train, x_test, distance_method = 'cosine', k = 3){
   ### MY CODE ###
 
   # get knn classification for all row in test data
-  output=apply(x_test,MARGIN = 1,knn_single_vector,x_train=x_train,y_train=y_train,distance_method=distance_method,k=k)
+  predictions=apply(x_test,MARGIN = 1,knn_single_vector,x_train=x_train,y_train=y_train,distance_method=distance_method,k=k)
+  return(predictions)
 }
 
 # ------- Part B -------
@@ -121,8 +122,15 @@ dtree <- function(x_train, y_train, x_test){
   # HINT2: I've given you attributes and class labels as separate variables. Do you need to combine them 
   # into a data frame for rpart?
   
-  
-  
+  train=data.frame(x_train,y_train)
+  model = rpart(
+    y_train ~ . , #predictors are all other variables 
+    data=train,
+    parms=list(split="information"), #based on information gain
+    method="class" #will predict classes
+  )
+  predictions=predict(model,newdata=x_test,type="class")
+  return(predictions)
 }
 
 # ------- Part C -------
@@ -220,3 +228,14 @@ calculate_precision <- function(confusion_matrix){
   
 }
 
+# Train a 5-nn classifier on the whole dataset and predict on the training dataset
+train_knn_predict <- knn(x, y, x, k=3)
+# Calcualte training accuracy. Expected output: 0.77
+print(mean(train_knn_predict == y))
+
+# ------- Part B -------
+
+# Train RPART on the whole dataset and predict on the training dataset
+train_dtree_predict <- dtree(x, y, x)
+# Calcualte training accuracy. Expected output: 0.85
+print(mean(train_dtree_predict == y))
