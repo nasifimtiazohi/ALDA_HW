@@ -12,18 +12,21 @@ require(caret)
 require(rpart)
 
 # ------- Part A -------
+vector_norm <- function (p) {
+  return(sqrt(sum(p^2)))
+}
 
 calculate_euclidean <- function(p, q) {
   # Input: p, q are numeric vectors of the same length
   # output: a single value of type double, containing the euclidean distance between p and q.
-  
+  return(vector_norm(p-q))
   
 }
 
 calculate_cosine <- function(p, q) {
   # Input: p, q are numeric vectors of the same length
   # output: a single value of type double, containing the cosine distance between p and q.
-  
+  return(sum(p*q)/(vector_norm(p)*vector_norm(q)))
   
 }
 
