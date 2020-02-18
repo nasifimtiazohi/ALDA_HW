@@ -1,5 +1,5 @@
 
-source('./hw2_solution.R')
+source('./hw2.R')
 
 # read data from disk, extract train test into separate variables 
 all_data <- read.csv('./pima-indians-diabetes.csv', stringsAsFactors= T, header = F)
@@ -56,7 +56,18 @@ knn_cv_accuracy <- calculate_accuracy(knn_cv_matrix)
 knn_cv_recall <- calculate_recall(knn_cv_matrix)
 knn_cv_precision <- calculate_precision(knn_cv_matrix)
 
+print(knn_cv_matrix)
+print(knn_cv_accuracy)
+print(knn_cv_recall)
+print(knn_cv_precision)
+
 dt_cv_matrix <- calculate_confusion_matrix(dt_cv_result,y)
 dt_cv_accuracy <- calculate_accuracy(dt_cv_matrix)
 dt_cv_recall <- calculate_recall(dt_cv_matrix)
 dt_cv_precision <- calculate_precision(dt_cv_matrix)
+
+print(dt_cv_matrix)
+print(dt_cv_accuracy)
+print(dt_cv_recall)
+print(dt_cv_precision)
+

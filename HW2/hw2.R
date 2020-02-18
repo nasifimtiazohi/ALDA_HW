@@ -3,6 +3,10 @@
 # Instructor: Dr. Thomas Price
 # Mention your team details here
 # @author: Yang Shi/yangatrue and Krishna Gadiraju/kgadira
+# G14
+# Saad Mohammad Abrar, sabrar
+# Taufiq Islam Protick, tprotic
+# Nasif Imtiaz, simtiaz
 #
 #
 #
