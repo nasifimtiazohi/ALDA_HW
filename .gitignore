@@ -44,3 +44,5 @@ vignettes/*.pdf
 #os files
 *.DS_Store
 
+*.zip
+
