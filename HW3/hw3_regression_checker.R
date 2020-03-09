@@ -66,19 +66,18 @@ reg_test_df <- reg_data[[2]]
 
 ###############################################
 # Regression
-
 # slr
 # simple_linear_regression_result: list, first argument is the model, second argument is the predicted values
 simple_linear_regression_result <- alda_regression(x_train=as.matrix(reg_train_df[,-20]),x_test=as.matrix(reg_test_df[,-20]), 
                                       y_train=reg_train_df[,20], regression_type='linear') 
-
-print(calculate_rmse(reg_test_df[,20],simple_linear_regression_result))
+#print(simple_linear_regression_result)
+print(calculate_rmse(reg_test_df[,20],simple_linear_regression_result[[2]]))
 # This should return a result of 1.266692 (using glmnet) or 1.23912 (using lm)
 
 # lasso
 # lasso_regression_result: list, first argument is the model, second argument are the predicted values
 lasso_regression_result <- alda_regression(x_train=as.matrix(reg_train_df[,-20]),x_test=as.matrix(reg_test_df[,-20]), 
                                               y_train=reg_train_df[,20], regression_type = 'lasso')
-
-print(calculate_rmse(reg_test_df[,20],lasso_regression_result))
+#print(lasso_regression_result)
+print(calculate_rmse(reg_test_df[,20],lasso_regression_result[[2]]))
 # This should return a result of 0.0547784
