@@ -30,6 +30,8 @@ print(calculate_loss(y_check, y_pred_check))
 # Gradient Calculation
 print(sum(calculate_dCdw(f_check,f_check,f_check)))
 # Should be -5.867997
+
+
 print(sum(calculate_dCdf(f_check,f_check,f_check))) # Only required for 2-layer network.
 # Should be -15.18125
 

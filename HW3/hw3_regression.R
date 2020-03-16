@@ -56,7 +56,6 @@ alda_regression <- function(x_train, x_test, y_train, regression_type){
     # predict on x_test using the model that gives least MSE
     y_test=predict(lasso_fit,s=lambda_best,newx=x_test)
     return (list(lasso_fit,y_test))
-
   }
   
 }

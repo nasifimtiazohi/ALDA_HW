@@ -18,10 +18,12 @@ sigmoid <- function(x) {
   
   # Inputs:
   # x: a matrix of values
-  
+  x=exp(-x)
+  x=1+x
+  x=1/x
   # Output:
   # A matrix with the same size of the input x, where every element x_i is the result of sigmoid(x_i) 
-  
+  return(x)
 }
 
 sigmoid_derivative <- function(x) {
@@ -29,9 +31,10 @@ sigmoid_derivative <- function(x) {
   
   # Inputs:
   # x: a matrix of values
-  
+  x=x*(1-x)
   # Output:
   # A matrix with the same size of the input x, where every element x_i is the result of the derivative of sigmoid(x_i).
+  return(x)
 }
 
 calculate_loss <- function(y_pred, y) {
@@ -40,10 +43,10 @@ calculate_loss <- function(y_pred, y) {
   # Inputs:
   # y_pred: a vector of activations from the last layer of the network.
   # y: a vector of the label of the training samples.
-  
+  se = sum((y - y_pred)^2)
   # Output:
   # A number that is the total MSE loss of y_pred and y.
-
+  return(se)
 }
 
 calculate_activations <- function(input_matrix, weight_matrix) {
@@ -55,13 +58,14 @@ calculate_activations <- function(input_matrix, weight_matrix) {
   # or the number of hidden units from last layer.
   # weight_matrix: a matrix, containing the weight for a layer. The dimention of the matrix is (m,q),
   # where q is the number of hidden units for this layer.
-  
   # Output:
   # A matrix with the size (n,q), activated by the sigmoid function. 
-  sigmoid(input_matrix %*% weight_matrix)
+  output=sigmoid(input_matrix %*% weight_matrix)
+  return(output)
 }
 
 calculate_dCdw <- function(in_activations, out_activations, out_dCdf) {
+
   # Calculate the derivative of loss function with respect to a weight matrix w
   
   # Inputs:
@@ -75,10 +79,16 @@ calculate_dCdw <- function(in_activations, out_activations, out_dCdf) {
   # Hint 2: Remember that dC/dw = dC/df * df/dx * dx/dw, where:
   # C is the cost function, f is the activation's output, x is input to the activation function, and w is a weight
   # Use the derivatives you calcualted in Problem 3 of the homework to help you implement this function
-  
+  dfdx=sigmoid_derivative(out_activations)
+  print("hello")
+  print(dim(dfdx))
+  print(dim(out_dCdf))
+  print(dim(t(in_activations)))
+  temp=out_dCdf %*% t(in_activations)
+  dCdw = temp * dfdx
   # Output:
   # A matrix with the same size of the target matrx w, recording the derivative of loss to w.
-
+  return(dCdw)  
 }
 
 # Note: 522 Only
@@ -115,26 +125,32 @@ neuralnet <- function(x_train, y_train, nodes_layer = 4, n_attributes = 8, learn
   
   #-------------------------------------------------------------#
   # Data and matrix initialization
-
+  x_train=data.matrix(x_train)
+  y_train=data.matrix(y_train)
+  #initializa weight matrix
+  firstLayerWeight=matrix(rnorm(n_attributes*nodes_layer,mean=0,sd=1),  n_attributes, nodes_layer)
+  secondLayerWeight=matrix(rnorm(nodes_layer,mean=0,sd=1), nodes_layer, 1)
   
   #-------------------------------------------------------------#
   # Training process
   for (i in 1:epochs) {
     #-------------------------------------------------------------#
     # Forward Propagation
-
+    firstLayerOutput=calculate_activations(x_train,firstLayerWeight)
+    secondLayerOutput = calculate_activations(firstLayerOutput,secondLayerWeight)
     
     #-------------------------------------------------------------#
     # Calculating training loss
-
+    loss=calculate_loss(secondLayerOutput,y_train)
     
     #-------------------------------------------------------------#
     # Derivative calculation
-
-    
+    secondLayer_dCdf= 2 * (secondLayerOutput - y_train)
+    secondLayerGradient = calculate_dCdw(secondLayerWeight,secondLayerOutput,secondLayer_dCdf)
     #-------------------------------------------------------------#
     # Updating weight matrices
-
+    #firstLayerWeight = 
+    break
   }
   #-------------------------------------------------------------#
   # Printing the final training loss
