@@ -80,12 +80,8 @@ calculate_dCdw <- function(in_activations, out_activations, out_dCdf) {
   # C is the cost function, f is the activation's output, x is input to the activation function, and w is a weight
   # Use the derivatives you calcualted in Problem 3 of the homework to help you implement this function
   dfdx=sigmoid_derivative(out_activations)
-  print("hello")
-  print(dim(dfdx))
-  print(dim(out_dCdf))
-  print(dim(t(in_activations)))
-  temp=out_dCdf %*% t(in_activations)
-  dCdw = temp * dfdx
+  dCdx= out_dCdf * dfdx
+  dCdw= t(in_activations) %*% dCdx
   # Output:
   # A matrix with the same size of the target matrx w, recording the derivative of loss to w.
   return(dCdw)  
@@ -104,11 +100,11 @@ calculate_dCdf <- function(weight_matrix, out_activations, out_dCdf) {
   # Hint 2: Remember that dC/df_{L-1} = dCdf_L/df_L * df_L/dx * dx/df_{L-1}, where:
   # C is the cost function, f_{L-1} is the activation at the previous layer, f_L is the activation at this layer,
   # and x is input to the activation function at this layer
-  
+  dCdf= (out_dCdf * sigmoid_derivative(out_activations)) %*% t(weight_matrix)
   # Output:
   # A matrix with the same size of the activation f, recording dC/df_{L-1}, the derivative of loss to 
   # f, the activations of the previous layer.
-
+  return(dCdf)
 }
 
 
@@ -128,6 +124,7 @@ neuralnet <- function(x_train, y_train, nodes_layer = 4, n_attributes = 8, learn
   x_train=data.matrix(x_train)
   y_train=data.matrix(y_train)
   #initializa weight matrix
+  set.seed(155)
   firstLayerWeight=matrix(rnorm(n_attributes*nodes_layer,mean=0,sd=1),  n_attributes, nodes_layer)
   secondLayerWeight=matrix(rnorm(nodes_layer,mean=0,sd=1), nodes_layer, 1)
   
@@ -138,19 +135,20 @@ neuralnet <- function(x_train, y_train, nodes_layer = 4, n_attributes = 8, learn
     # Forward Propagation
     firstLayerOutput=calculate_activations(x_train,firstLayerWeight)
     secondLayerOutput = calculate_activations(firstLayerOutput,secondLayerWeight)
-    
     #-------------------------------------------------------------#
     # Calculating training loss
     loss=calculate_loss(secondLayerOutput,y_train)
     
     #-------------------------------------------------------------#
     # Derivative calculation
-    secondLayer_dCdf= 2 * (secondLayerOutput - y_train)
-    secondLayerGradient = calculate_dCdw(secondLayerWeight,secondLayerOutput,secondLayer_dCdf)
+    out_dCdf= 2 * (secondLayerOutput - y_train)
+    secondLayerGradient = calculate_dCdw(firstLayerOutput,secondLayerOutput,out_dCdf)
+    firsrLayer_dCdf = calculate_dCdf(secondLayerWeight,secondLayerOutput,out_dCdf)
+    firtLayerGradient = calculate_dCdw(x_train,firstLayerOutput,firsrLayer_dCdf)
     #-------------------------------------------------------------#
     # Updating weight matrices
-    #firstLayerWeight = 
-    break
+    secondLayerWeight = secondLayerWeight + learning_rate * secondLayerGradient
+    firstLayerWeight =  firstLayerWeight + learning_rate * firtLayerGradient
   }
   #-------------------------------------------------------------#
   # Printing the final training loss
