@@ -124,7 +124,7 @@ neuralnet <- function(x_train, y_train, nodes_layer = 4, n_attributes = 8, learn
   x_train=data.matrix(x_train)
   y_train=data.matrix(y_train)
   #initializa weight matrix
-  set.seed(155)
+  #set.seed(155)
   firstLayerWeight=matrix(rnorm(n_attributes*nodes_layer,mean=0,sd=1),  n_attributes, nodes_layer)
   secondLayerWeight=matrix(rnorm(nodes_layer,mean=0,sd=1), nodes_layer, 1)
   
