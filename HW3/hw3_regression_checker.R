@@ -72,13 +72,13 @@ reg_test_df <- reg_data[[2]]
 simple_linear_regression_result <- alda_regression(x_train=as.matrix(reg_train_df[,-20]),x_test=as.matrix(reg_test_df[,-20]), 
                                       y_train=reg_train_df[,20], regression_type='linear') 
 
-print(calculate_rmse(reg_test_df[,20],simple_linear_regression_result[[2]]))
-# This should return a result of 1311.051
+print(calculate_rmse(reg_test_df[,20],simple_linear_regression_result))
+# This should return a result of 1300.289
 
 # lasso
 # lasso_regression_result: list, first argument is the model, second argument are the predicted values
 lasso_regression_result <- alda_regression(x_train=as.matrix(reg_train_df[,-20]),x_test=as.matrix(reg_test_df[,-20]), 
                                               y_train=reg_train_df[,20], regression_type = 'lasso')
 
-print(calculate_rmse(reg_test_df[,20],lasso_regression_result[[2]]))
-# This should return a result of 321.3975
+print(calculate_rmse(reg_test_df[,20],lasso_regression_result))
+# This should return a result of 321.3975, or 321.3463.
