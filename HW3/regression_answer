@@ -1,0 +1,4 @@
+1. Lasso regression is a good method for feature selection and it eliminates 8 features out of 19.
+So, those features are not important and only adds noise to training causing the model to overfit to those noise.
+
+2. We should keep: x2, x3, x6, x7, x9, x10, x12, x14, x15, x16, x17

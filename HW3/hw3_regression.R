@@ -35,14 +35,14 @@ alda_regression <- function(x_train, x_test, y_train, regression_type){
     # Optional: can you use glmnet to do simple linear regression as well?
     # Explore away!  
     # Hint: Think of what the lambda value means for linear regression without regularization.
-    train=as.data.frame(x_train)
-    y_train=as.data.frame(y_train)
-    x_test=as.data.frame(x_test)
-    train$y=y_train[,1]
-    fit=lm(y~.,data=train)
+    # train=as.data.frame(x_train)
+    # y_train=as.data.frame(y_train)
+    # x_test=as.data.frame(x_test)
+    # train$y=y_train[,1]
+    #fit=lm(y~.,data=train)
+    lin_fit=glmnet(x_train,y_train,lamdba=0)
     # predict using the model
-    y_test=predict(fit,newdata=x_test)
-    return (list(fit,y_test))
+    y_test=predict(lin_fit,s=0,newx=x_test)
     
   }else{
     # ~ 2-3 lines of code
@@ -53,11 +53,11 @@ alda_regression <- function(x_train, x_test, y_train, regression_type){
     lasso_reg=cv.glmnet(x_train,y_train,type.measure = "mse", nfolds=10)
     lambda_best=lasso_reg$lambda.min
     lasso_fit=glmnet(x_train,y_train,lambda=lambda_best)
+    #print(coef(lasso_fit))
     # predict on x_test using the model that gives least MSE
     y_test=predict(lasso_fit,s=lambda_best,newx=x_test)
-    return (list(lasso_fit,y_test))
   }
-  
+  return(y_test)
 }
 
 
