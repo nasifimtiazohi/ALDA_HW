@@ -230,5 +230,25 @@ classification_compare_accuracy <- function(y_test, linear_kernel_prediction, ra
   # Allowed packages: R-base
   # Note that I asked you to implement accuracy calculation - do not use a library for this
   
+  df_linear <- table(y_test, linear_kernel_prediction)
+  linear_acc<- (df_linear[1,1]+df_linear[2,2])/(sum(df_linear))
+  #print(linear_acc)
   
+  
+  df_radial <- table(y_test, radial_kernel_prediction)
+  radial_acc<- (df_radial[1,1]+df_radial[2,2])/(sum(df_radial))
+  #print(radial_acc)
+  
+  df_sigmoid <- table(y_test, sigmoid_kernel_prediction)
+  sigmoid_acc<- (df_sigmoid[1,1]+df_sigmoid[2,2])/(sum(df_sigmoid))
+  #print(sigmoid_acc)
+  
+  df_poly <- table(y_test, polynomial_kernel_prediction)
+  poly_acc<- (df_poly[1,1]+df_poly[2,2])/(sum(df_poly))
+  #print(poly_acc)
+  accuracies <- c(linear_acc, radial_acc, poly_acc, sigmoid_acc)*100
+  #print(accuracies)
+  
+  best_svm_kernel= switch(which.max(accuracies),"svm-linear","svm-radial","svm-poly","svm-sigmoid")
+  return(list(best_svm_kernel, max(accuracies),accuracies))
 }

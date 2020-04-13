@@ -8,6 +8,8 @@ rm(list=ls(all=T))
 cat('\014')
 
 # source hw4.R
+
+setwd('/Users/saad6/Downloads/CSC-522/Homeworks/ALDA_HW/HW4')
 source('./hw4.R')
 
 # set your working directory
@@ -62,9 +64,7 @@ load_data <- function(data_folder='./data/', learning_type){
 ##########################################################################################################
 # Load data
 # load data necessary for clustering
-getwd()
-setwd('/Users/saad6/Downloads/CSC-522/Homeworks/ALDA_HW/HW4/HW4')
-getwd()
+
 clustering_data <- load_data(data_folder='./data/', learning_type='clustering')
 
 # load data necessary for classification
@@ -126,15 +126,15 @@ linear_svm_result
 # radial kernel
 radial_svm_result <- alda_svm(x_train = clf_train_df[,-5], x_test = clf_test_df[,-5], y_train = clf_train_df[,5], 
                               kernel_name = 'radial')
-
+radial_svm_result
 # sigmoid kernel
 sigmoid_svm_result <- alda_svm(x_train = clf_train_df[,-5], x_test = clf_test_df[,-5], y_train = clf_train_df[,5], 
                                kernel_name = 'sigmoid')
-
+sigmoid_svm_result
 # polynomial kernel
 polynomial_svm_result <- alda_svm(x_train = clf_train_df[,-5], x_test = clf_test_df[,-5], y_train = clf_train_df[,5], 
                                   kernel_name = 'polynomial')
-
+polynomial_svm_result
 # plot the results and make comparisons
 plot(clf_test_df[,1], clf_test_df[,2], type='p', pch = '*', col=clf_test_df[,5], main = "Ground Truth", xlab = 'x1', ylab = 'x2')
 plot(clf_test_df[,1], clf_test_df[,2], type='p', pch = '*', col=linear_svm_result[[2]], main = "SVM linear kernal", xlab = 'x1', ylab = 'x2')
