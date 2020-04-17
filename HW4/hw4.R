@@ -159,7 +159,7 @@ alda_svm <- function(x_train, x_test, y_train, kernel_name){
   
   if(kernel_name == "radial"){
     # ~1-2 lines 
-    svm_tune <- tune(svm, x_train, y_train, kernel="radial",ranges = list(gamma=c(0.01, 0.1, 1, 10), cost = c(0.01, 0.1, 1, 10)))
+    svm_tune <- tune(svm, x_train, y_train, kernel="radial",ranges = list(gamma=c(0.01, 0.1, 1, 10), cost = c(0.01, 0.1, 1, 10)),tunecontrol = tune.control(cross=10))
     best_cost <- svm_tune$best.parameters$cost
     best_gamma <- svm_tune$best.parameters$gamma
     svm_after_tune <- svm(x_train, y_train, kernel="radial", cost=best_cost,gamma = best_gamma)
@@ -169,7 +169,7 @@ alda_svm <- function(x_train, x_test, y_train, kernel_name){
   }else if(kernel_name == 'polynomial'){
     #~1-2 lines
     
-    svm_tune <- tune(svm, x_train, y_train, kernel="polynomial",ranges = list(gamma=c(0.05, 0.5, 1, 2), cost = c(0.01, 0.1, 1, 10), degree=c(1,2,3)))
+    svm_tune <- tune(svm, x_train, y_train, kernel="polynomial",ranges = list(gamma=c(0.05, 0.5, 1, 2), cost = c(0.01, 0.1, 1, 10), degree=c(1,2,3)),tunecontrol = tune.control(cross=10))
     best_cost <- svm_tune$best.parameters$cost
     best_gamma <- svm_tune$best.parameters$gamma
     best_degree <-svm_tune$best.parameters$degree
@@ -180,7 +180,7 @@ alda_svm <- function(x_train, x_test, y_train, kernel_name){
 
   }else if(kernel_name == 'sigmoid'){
     #~1-2 lines
-    svm_tune <- tune(svm, x_train, y_train, kernel="sigmoid",ranges = list(gamma=c(0.05, 0.5, 1, 2), cost = c(0.01, 0.1, 1, 10)))
+    svm_tune <- tune(svm, x_train, y_train, kernel="sigmoid",ranges = list(gamma=c(0.05, 0.5, 1, 2), cost = c(0.01, 0.1, 1, 10)),tunecontrol = tune.control(cross=10))
     best_cost <- svm_tune$best.parameters$cost
     best_gamma <- svm_tune$best.parameters$gamma
     svm_after_tune <- svm(x_train, y_train, kernel="sigmoid", cost=best_cost,gamma = best_gamma)
@@ -190,7 +190,7 @@ alda_svm <- function(x_train, x_test, y_train, kernel_name){
     
   }else{ # default linear kernel
     #~1-2 lines
-    svm_tune <- tune(svm, x_train, y_train, kernel="linear",ranges = list(cost = c(0.01, 0.1, 1, 10)))
+    svm_tune <- tune(svm, x_train, y_train, kernel="linear",ranges = list(cost = c(0.01, 0.1, 1, 10)),tunecontrol = tune.control(cross=10))
     best_cost <- svm_tune$best.parameters$cost
     svm_after_tune <- svm(x_train, y_train, kernel="linear", cost=best_cost)
     
