@@ -40,7 +40,7 @@ alda_regression <- function(x_train, x_test, y_train, regression_type){
     # x_test=as.data.frame(x_test)
     # train$y=y_train[,1]
     #fit=lm(y~.,data=train)
-    lin_fit=glmnet(x_train,y_train,lamdba=0)
+    lin_fit=glmnet(x_train,y_train,lamdba=0,alpha=0)
     # predict using the model
     y_test=predict(lin_fit,s=0,newx=x_test)
     
