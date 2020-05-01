@@ -147,8 +147,8 @@ neuralnet <- function(x_train, y_train, nodes_layer = 4, n_attributes = 8, learn
     firtLayerGradient = calculate_dCdw(x_train,firstLayerOutput,firsrLayer_dCdf)
     #-------------------------------------------------------------#
     # Updating weight matrices
-    secondLayerWeight = secondLayerWeight + learning_rate * secondLayerGradient
-    firstLayerWeight =  firstLayerWeight + learning_rate * firtLayerGradient
+    secondLayerWeight = secondLayerWeight - learning_rate * secondLayerGradient
+    firstLayerWeight =  firstLayerWeight - learning_rate * firtLayerGradient
   }
   #-------------------------------------------------------------#
   # Printing the final training loss
